@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+  puts OpenUriCache.open('http://google.com', expiration: Time.now + 10*60).read
 
 ## Development
 
