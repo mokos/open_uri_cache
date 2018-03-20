@@ -1,7 +1,7 @@
 # OpenUriCache
 
 Ruby open-uri cached version.
-Make cache file named CGI.escape(uri) and expiration time.
+Make cache file named "#{CGI.escape(uri)} {expiration time}".
 
 
 ## Installation
