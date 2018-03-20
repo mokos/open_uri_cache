@@ -1,8 +1,8 @@
 # OpenUriCache
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/open_uri_cache`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby open-uri cached version.
+Make cache file named CGI.escape(uri) and expiration time.
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
