@@ -6,19 +6,8 @@ Make cache file named "#{CGI.escape(uri)} {expiration time}".
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'open_uri_cache'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install open_uri_cache
+    $ gem install specific_install
+    $ gem install http://github.com/mokos/open_uri_cache.git
 
 ## Usage
 
