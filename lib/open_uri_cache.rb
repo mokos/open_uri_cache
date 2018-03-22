@@ -20,16 +20,17 @@ module OpenUriCache
     Time.parse(time_str)
   end
 
-  def self.open(uri, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: )
+  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration:, delete_if_expired: true)
+
     FileUtils.mkdir_p(cache_dir)
     Dir.chdir(cache_dir) {
 
       search_files(uri).each do |f|
         if get_expiration(f)>Time.now
-          return Kernel.open(f)
-        else
-          File.delete f
+          return Kernel.open(f, *rest)
         end
+
+        File.delete f if delete_if_expired
       end
 
       s = Kernel.open(uri)
@@ -44,6 +45,7 @@ module OpenUriCache
 end
 
 if $0==__FILE__
-  puts OpenUriCache.open('http://google.com', expiration: Time.now + 10*60).read
-  puts OpenUriCache.open('http://google.com', expiration: Time.now + 10*60).read
+  puts open('http://google.com').read
+  puts open('http://google.com', expiration: Time.now + 10*60).read
+  puts open('http://google.com', expiration: Time.now + 10*60).read
 end
