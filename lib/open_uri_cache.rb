@@ -5,6 +5,8 @@ require 'open-uri'
 require 'cgi'
 
 module OpenUriCache
+  DEFAULT_CACHE_DIRECTORY = "#{ENV['HOME']}/.open-uri-cache"
+
   def self.make_file_name(uri, expiration)
     "#{CGI.escape uri} #{expiration}"
   end
@@ -18,7 +20,7 @@ module OpenUriCache
     Time.parse(time_str)
   end
 
-  def self.open(uri, cache_dir: "#{ENV['HOME']}/.open-uri-cache", expiration: )
+  def self.open(uri, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: )
     FileUtils.mkdir_p(cache_dir)
     Dir.chdir(cache_dir) {
 
