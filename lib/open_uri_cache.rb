@@ -5,7 +5,7 @@ require 'open-uri'
 require 'cgi'
 
 module OpenUriCache
-  DEFAULT_CACHE_DIRECTORY = "#{ENV['HOME']}/.open-uri-cache"
+  DEFAULT_CACHE_DIRECTORY = "#{ENV['HOME']}/.open_uri_cache"
 
   def self.make_file_name(uri, expiration)
     "#{CGI.escape uri} #{expiration}"
@@ -27,12 +27,14 @@ module OpenUriCache
 
       search_files(uri).each do |f|
         if get_expiration(f)>Time.now
-          return Kernel.open(f, *rest)
+          puts 'use cache: ' + f
+          return File.open(f, *rest)
         end
 
         File.delete f if delete_if_expired
       end
 
+      puts 'new open'
       s = Kernel.open(uri)
       cache_filename = make_file_name(uri, expiration)
       File.open(cache_filename, 'wb+') {|f|

@@ -1,7 +1,7 @@
 # OpenUriCache
 
-Ruby open-uri のキャッシュバージョン。
-Make cache file named "#{CGI.escape(uri)} {expiration time}".
+キャッシュ機能を追加した open-uri。
+"#{CGI.escape(uri)} {expiration time}"にリネームしたキャッシュファイルを作ります。
 
 
 ## インストール
