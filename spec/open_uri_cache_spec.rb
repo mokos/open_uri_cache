@@ -3,6 +3,7 @@
 
 require 'open_uri_cache'
 require 'tmpdir'
+require 'kconv'
 
 RSpec.describe OpenUriCache do
   it "has a version number" do
@@ -16,7 +17,7 @@ RSpec.describe OpenUriCache do
       doc = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
       doc2 = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
 
-      expect(doc.read.to_s).to eq doc2.read.to_s
+      expect(doc.read.to_s.toutf8).to eq doc2.read.to_s.toutf8
     }
   end
 
