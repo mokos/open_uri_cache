@@ -2,12 +2,13 @@
 
 キャッシュ機能を追加した open-uri。
 "#{CGI.escape(uri)} {expiration time}"にリネームしたキャッシュファイルを作ります。
+リネーム後のファイル名が256文字を超える場合エラーになります。
 
 
 ## インストール
 
     $ gem install specific_install
-    $ gem install http://github.com/mokos/open_uri_cache.git
+    $ gem specific_install http://github.com/mokos/open_uri_cache.git
 
 
 ## 使い方
