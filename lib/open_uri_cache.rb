@@ -26,7 +26,7 @@ module OpenUriCache
     end
 
     unless expiration
-      expiratioon = Time.new(3000, 1, 1)
+      expiratioon = Time.new(9999, 1, 1)
     end
 
     FileUtils.mkdir_p(cache_dir)
@@ -34,7 +34,6 @@ module OpenUriCache
 
       search_files(uri).each do |f|
         if get_expiration(f)>Time.now
-          puts 'use cache'
           return File.open(f, *rest)
         end
 
