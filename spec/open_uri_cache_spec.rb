@@ -35,7 +35,7 @@ RSpec.describe OpenUriCache do
     }
   end
 
-  it 'forever' do
+  it 'no expiration' do
     Dir.mktmpdir {|tmpdir|
       url = 'https://twitter.com'
       doc = OpenUriCache.open(url, cache_dir: tmpdir)
