@@ -19,4 +19,7 @@
   # after で現在時刻から何秒後を有効期限にするか指定
   # open(url, expiration: Time.now+s) == open(url, after: s)
   puts OpenUriCache.open('http://google.com', after: 10*60).read
+
+  # cache_dir でキャッシュファイル保存ディレクトリを指定(デフォルトは~/.open_uri_cache)
+  puts OpenUriCache.open('http://google.com', cache_dir: './', after: 10*60).read
 ```
