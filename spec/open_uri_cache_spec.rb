@@ -39,7 +39,7 @@ RSpec.describe OpenUriCache do
     Dir.mktmpdir {|tmpdir|
       url = 'https://twitter.com'
       doc = OpenUriCache.open(url, cache_dir: tmpdir)
+      doc = OpenUriCache.open(url, cache_dir: tmpdir)
     }
-
   end
 end

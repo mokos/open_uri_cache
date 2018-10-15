@@ -26,7 +26,7 @@ module OpenUriCache
     end
 
     unless expiration
-      expiratioon = Time.new(9999, 1, 1)
+      expiration = Time.new(9999, 1, 1)
     end
 
     FileUtils.mkdir_p(cache_dir)
