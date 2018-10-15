@@ -40,7 +40,7 @@ module OpenUriCache
         File.delete f if delete_if_expired
       end
 
-      s = Kernel.open(uri, 'b')
+      s = Kernel.open(uri, 'rb')
       cache_filename = make_file_name(uri, expiration)
       File.open(cache_filename, 'wb+') {|f|
         f.write s.read
