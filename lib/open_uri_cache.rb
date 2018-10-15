@@ -42,9 +42,14 @@ module OpenUriCache
 
       s = Kernel.open(uri, 'rb')
       cache_filename = make_file_name(uri, expiration)
-      File.open(cache_filename, 'wb+') {|f|
-        f.write s.read
-      }
+      begin
+        File.open(cache_filename, 'wb+') {|f|
+          f.write s.read
+        }
+      rescue
+        File.delete(cache_filename)
+      end
+
       s.rewind
       return s
     }
