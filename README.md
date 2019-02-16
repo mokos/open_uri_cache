@@ -25,11 +25,12 @@
 
 ## 仕様
 
-### openした結果がキャッシュかどうか
+### openの返り値
 キャッシュがなかった場合、期限が切れていた場合は、open-uriのopenの返り値をそのまま返します。(URLを開いた場合はTempfileオブジェクト)
 
 キャッシュが存在し期限も切れていない場合は、OpenUriCache::CacheFileオブジェクトを返します。CacheFile は OpenURI::Meta のメソッドをそなえています。(
 https://docs.ruby-lang.org/ja/latest/class/OpenURI=3a=3aMeta.html)
+open の結果がキャッシュかどうかは、クラス判定してください。
 
 ### キャッシュのディレクトリ
 キャッシュファイルを保存するディレクトリ名は、URLのhttp://(もしくはhttps://)以下の部分をそのまま利用します。
