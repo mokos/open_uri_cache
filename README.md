@@ -25,11 +25,17 @@
 
 ## 仕様
 
-### キャッシュのディレクトリ
-キャッシュファイルのパスは、URLのhttp://(もしくはhttps://)以下の部分をそのまま利用します。
-例えば http://a.com/b.html のキャッシュファイルは、 指定ディレクトリ/a.com/b.html 以下に、
+### openした結果がキャッシュかどうか
+キャッシュがなかった場合、期限が切れていた場合は、open-uriのopenの返り値をそのまま返します。(URLを開いた場合はTempfileオブジェクト)
 
-- content    (b.htmlの中身)
+キャッシュが存在し期限も切れていない場合は、OpenUriCache::CacheFileオブジェクトを返します。CacheFile は OpenURI::Meta のメソッドをそなえています。(
+https://docs.ruby-lang.org/ja/latest/class/OpenURI=3a=3aMeta.html)
+
+### キャッシュのディレクトリ
+キャッシュファイルを保存するディレクトリ名は、URLのhttp://(もしくはhttps://)以下の部分をそのまま利用します。
+例えば http://a.com/b/c.html のキャッシュファイルは、 指定ディレクトリ/a.com/b/c.html 以下に、
+
+- content    (c.htmlの中身)
 - info.json  (キャッシュ期限やダウンロード時のURIやメタ情報など)
 
 の２つのファイルを作成します。
