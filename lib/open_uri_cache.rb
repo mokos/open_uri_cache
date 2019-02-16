@@ -10,7 +10,7 @@ module OpenUriCache
   class Cache
     def initialize(uri, dir)
       @uri = uri
-      @dir = Pathname.new(dir).join(uri.gsub(/^https?:\/\//, ''))
+      @dir = Pathname.new(dir).join(uri.gsub(/^(https?|ftp):\/\//, ''))
       @content_path = "#{@dir}/content"
       @info_path = "#{@dir}/info.json"
 
