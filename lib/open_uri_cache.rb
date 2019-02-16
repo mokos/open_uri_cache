@@ -78,9 +78,3 @@ module OpenUriCache
     end
   end
 end
-
-if $0==__FILE__
-  puts OpenUriCache.open2('http://google.com', cache_dir: '.open_uri_cache', after: 1).class
-  puts OpenUriCache.open2('http://google.com/', cache_dir: '.open_uri_cache', after: 1).class
-  exit
-end
