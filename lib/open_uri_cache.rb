@@ -7,6 +7,29 @@ require 'cgi'
 require 'json'
 
 module OpenUriCache
+  class CacheFile < File
+    private_class_method :new
+
+    def set_info(info)
+      @info = info
+    end
+
+    def method_missing(name)
+      n = name.to_s
+      if @info.has_key? n
+        @info[n]
+      else
+        super
+      end
+    end
+
+    def self.open(file_path, info, *args)
+      f = super(file_path, *args)
+      f.set_info(info)
+      f
+    end
+  end
+
   class Cache
     def initialize(uri, dir)
       @uri = uri
@@ -20,10 +43,13 @@ module OpenUriCache
     def delete_expired_cache
       return unless exist?
       
-      info = JSON.parse File.open(@info_path, 'r') {|f| f.read }
-      if Time.now > Time.parse(info['expiration'])
+      if Time.now > Time.parse(info_json['expiration'])
         delete
       end
+    end
+
+    def info_json
+      JSON.parse File.open(@info_path, 'r') {|f| f.read }
     end
 
     def delete
@@ -47,7 +73,7 @@ module OpenUriCache
     end
 
     def open(*args)
-      File.open(@content_path, *args)
+      CacheFile.open(@content_path, info_json, *args)
     end
   end
 
@@ -66,15 +92,25 @@ module OpenUriCache
     if cache.exist?
       return cache.open(*rest)
     else
-      s = Kernel.open(uri, 'rb')
+      f = Kernel.open(uri, 'rb')
       begin
-        cache.save(s.read, { expiration: expiration, meta: s.meta })
+        info = {
+          expiration: expiration,
+          base_uri: f.base_uri,
+          charset: f.charset,
+          content_encoding: f.content_encoding,
+          content_type: f.content_type,
+          last_modified: f.last_modified,
+          meta: f.meta,
+          status: f.status,
+        }
+        cache.save(f.read, info)
       rescue
         cache.delete
       end
 
-      s.rewind
-      return s
+      f.rewind
+      return f
     end
   end
 end

@@ -12,7 +12,6 @@ RSpec.describe OpenUriCache do
 
   it 'same result with cache' do
     Dir.mktmpdir {|tmpdir|
-      tmpdir = './.open_uri_cache'
       url = 'https://twitter.com'
       doc = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
       doc2 = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
@@ -42,4 +41,21 @@ RSpec.describe OpenUriCache do
       doc = OpenUriCache.open(url, cache_dir: tmpdir)
     }
   end
+
+  it 'can access open-uri like method' do
+    Dir.mktmpdir {|tmpdir|
+      url = 'https://twitter.com'
+      OpenUriCache.open(url, cache_dir: tmpdir)
+      doc = OpenUriCache.open(url, cache_dir: tmpdir)
+      puts doc.class
+      puts doc.base_uri
+      puts doc.expiration
+      puts doc.charset
+      puts doc.content_encoding
+      puts doc.content_type
+      puts doc.last_modified
+      puts doc.status
+    }
+  end
+
 end
