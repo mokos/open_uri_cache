@@ -1,6 +1,7 @@
 # OpenUriCache
 
 キャッシュ機能を追加した open-uri。
+open-uri と違い、Kernel::open は書き換えません。
 
 指定ディレクトリ(デフォルトは ~/.open_uri_cache)以下にキャッシュファイルを作成し、すでにキャッシュファイルがある場合はそれを読み込みます。
 
