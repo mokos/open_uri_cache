@@ -16,7 +16,7 @@ RSpec.describe OpenUriCache do
       doc = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
       doc2 = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
 
-      expect(doc.read.to_s.toutf8).to eq doc2.read.to_s.toutf8
+      expect(doc.read).to eq doc2.read
     }
   end
 
@@ -30,15 +30,15 @@ RSpec.describe OpenUriCache do
 
       doc2 = OpenUriCache.open(url, cache_dir: tmpdir, after: 10)
 
-      expect(doc.read.to_s).not_to eq doc2.read.to_s
+      expect(doc.read).not_to eq doc2.read
     }
   end
 
   it 'no expiration' do
     Dir.mktmpdir {|tmpdir|
       url = 'https://twitter.com'
-      doc = OpenUriCache.open(url, cache_dir: tmpdir)
-      doc = OpenUriCache.open(url, cache_dir: tmpdir)
+      OpenUriCache.open(url, cache_dir: tmpdir)
+      OpenUriCache.open(url, cache_dir: tmpdir)
     }
   end
 
