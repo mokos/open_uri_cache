@@ -42,6 +42,17 @@ RSpec.describe OpenUriCache do
     }
   end
 
+  it 'return Tmpfile object if no cache, CacheFile if cache' do
+    Dir.mktmpdir {|tmpdir|
+      url = 'https://twitter.com'
+      doc = OpenUriCache.open(url, cache_dir: tmpdir)
+      expect(doc.class).to eq Tempfile
+
+      doc = OpenUriCache.open(url, cache_dir: tmpdir)
+      expect(doc.class).to eq OpenUriCache::CacheFile
+    }
+  end
+
   it 'can access open-uri like method' do
     Dir.mktmpdir {|tmpdir|
       url = 'https://twitter.com'
