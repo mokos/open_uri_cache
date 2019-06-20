@@ -69,4 +69,23 @@ RSpec.describe OpenUriCache do
     }
   end
 
+  it 'sleep when no cache, no sleep when cache' do
+    Dir.mktmpdir {|tmpdir|
+      sleep_sec = 1
+
+      url = 'https://twitter.com'
+      t = Time.now
+      OpenUriCache.open(url, cache_dir: tmpdir, sleep_sec: sleep_sec)
+      dt_no_cache = Time.now-t
+
+      expect(dt_no_cache).to be > sleep_sec
+
+      t = Time.now
+      OpenUriCache.open(url, cache_dir: tmpdir, sleep_sec: sleep_sec)
+      dt_cache = Time.now-t
+
+      expect(dt_cache).to be < sleep_sec # may be almost 0
+    }
+  end
+
 end
