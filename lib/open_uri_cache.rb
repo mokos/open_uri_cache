@@ -81,44 +81,42 @@ module OpenUriCache
 
   DEFAULT_CACHE_DIRECTORY = "#{ENV['HOME']}/.open_uri_cache"
 
-  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: nil, after: nil, sleep_sec: 0, success_check: lambda {|f| true })
+  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: nil, after: nil, sleep_sec: 0, retry_num: 0, success_check: lambda {|f| true })
     if after
       expiration = Time.now + after
     end
 
-    unless expiration
-      expiration = Time.new(9999, 1, 1)
-    end
+    expiration ||= Time.new(9999, 1, 1)
 
     cache = Cache.new(uri, cache_dir)
+
     if cache.exist?
-      f = cache.open(*rest)
-      raise SuccessCheckError unless success_check.call f
-      return f
-    else
+      return cache.open(*rest)
+    end
+
+    begin
+      sleep sleep_sec
       f = Kernel.open(uri, 'rb')
       raise SuccessCheckError unless success_check.call f
-
-      begin
-        info = {
-          expiration: expiration,
-          base_uri: f.base_uri,
-          charset: f.charset,
-          content_encoding: f.content_encoding,
-          content_type: f.content_type,
-          last_modified: f.last_modified,
-          meta: f.meta,
-          status: f.status,
-        }
-        cache.save(f.read, info)
-      rescue
-        cache.delete
-      end
-
-      sleep sleep_sec
-
-      f.rewind
-      return f
+    rescue
+      retry_num -= 1
+      retry if retry_num>=0
+      raise
     end
+
+    info = {
+      expiration: expiration,
+      base_uri: f.base_uri,
+      charset: f.charset,
+      content_encoding: f.content_encoding,
+      content_type: f.content_type,
+      last_modified: f.last_modified,
+      meta: f.meta,
+      status: f.status,
+    }
+    cache.save(f.read, info) rescue cache.delete
+
+    f.rewind
+    return f
   end
 end

@@ -32,6 +32,9 @@ open-uri と違い、Kernel::open は書き換えません。
   # success_check でファイルダウンロードの成否をチェックし、失敗した場合例外OpenUriCache::SuccessCheckErrorを返してキャッシュを保存しない。
   # success_check はFileオブジェクトを引数に取り、成功のとき true、失敗のとき false を返す関数オブジェクト
   OpenUriCache.open(url, success_check: lambda {|f| f.content_type.match('text/html'))
+
+  # retry_num でダウンロード失敗したときのリトライ回数を指定。
+  # デフォルトは0回。
 ```
 
 ## 仕様

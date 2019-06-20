@@ -100,4 +100,22 @@ RSpec.describe OpenUriCache do
     }
   end
 
+  it 'retry' do
+    Dir.mktmpdir {|tmpdir|
+      url = 'https://twitter.com'
+      OpenUriCache.open(url, cache_dir: tmpdir, retry_num: 3)
+
+      url = 'htps://twitter.com'
+      t = Time.now
+      n = 3
+      s = 0.25
+      expect {
+        OpenUriCache.open(url, cache_dir: tmpdir, retry_num: n, sleep_sec: s)
+      }.to raise_error
+      dt = Time.now - t
+
+      expect(dt).to be > s*(n+1)
+
+    }
+  end
 end
