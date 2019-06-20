@@ -1,4 +1,4 @@
-require "open_uri_cache/version"
+require_relative 'open_uri_cache/version'
 
 require 'fileutils'
 require 'pathname'
