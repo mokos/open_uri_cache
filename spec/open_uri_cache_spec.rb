@@ -88,4 +88,16 @@ RSpec.describe OpenUriCache do
     }
   end
 
+  it 'success check' do
+    Dir.mktmpdir {|tmpdir|
+      url = 'https://twitter.com'
+      t = Time.now
+      expect {
+        OpenUriCache.open(url, cache_dir: tmpdir, success_check: lambda {|f| false })
+      }.to raise_error(OpenUriCache::SuccessCheckError)
+
+      OpenUriCache.open(url, cache_dir: tmpdir, success_check: lambda {|f| f.content_type.match('text/html') })
+    }
+  end
+
 end

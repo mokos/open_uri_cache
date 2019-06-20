@@ -16,18 +16,22 @@ open-uri と違い、Kernel::open は書き換えません。
   url = 'http://google.com'
 
   # expiration でキャッシュの有効期限を指定
-  puts OpenUriCache.open(url, expiration: Time.now + 10*60).read
+  OpenUriCache.open(url, expiration: Time.now + 10*60)
   
   # after で現在時刻から何秒後を有効期限にするか指定
   # open(url, expiration: Time.now+s) == open(url, after: s)
-  puts OpenUriCache.open(url, after: 10*60).read
+  OpenUriCache.open(url, after: 10*60)
 
   # cache_dir でキャッシュファイル保存ディレクトリを指定(デフォルトは~/.open_uri_cache)
-  puts OpenUriCache.open(url, cache_dir: './', after: 10*60).read
+  OpenUriCache.open(url, cache_dir: './', after: 10*60)
 
   # sleep_sec でキャッシュがないときのスリープ時間（秒）を指定。
   # キャッシュがあった場合はスリープしない。
-  puts OpenUriCache.open(url, sleep_sec: 1).read
+  OpenUriCache.open(url, sleep_sec: 1)
+
+  # success_check でファイルダウンロードの成否をチェックし、失敗した場合例外OpenUriCache::SuccessCheckErrorを返してキャッシュを保存しない。
+  # success_check はFileオブジェクトを引数に取り、成功のとき true、失敗のとき false を返す関数オブジェクト
+  OpenUriCache.open(url, success_check: lambda {|f| f.content_type.match('text/html'))
 ```
 
 ## 仕様

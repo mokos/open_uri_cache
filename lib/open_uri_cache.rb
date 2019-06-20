@@ -7,6 +7,8 @@ require 'cgi'
 require 'json'
 
 module OpenUriCache
+  class SuccessCheckError < StandardError; end
+
   class CacheFile < File
     private_class_method :new
 
@@ -79,7 +81,7 @@ module OpenUriCache
 
   DEFAULT_CACHE_DIRECTORY = "#{ENV['HOME']}/.open_uri_cache"
 
-  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: nil, after: nil, sleep_sec: 0)
+  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: nil, after: nil, sleep_sec: 0, success_check: lambda {|f| true })
     if after
       expiration = Time.now + after
     end
@@ -90,9 +92,13 @@ module OpenUriCache
 
     cache = Cache.new(uri, cache_dir)
     if cache.exist?
-      return cache.open(*rest)
+      f = cache.open(*rest)
+      raise SuccessCheckError unless success_check.call f
+      return f
     else
       f = Kernel.open(uri, 'rb')
+      raise SuccessCheckError unless success_check.call f
+
       begin
         info = {
           expiration: expiration,
