@@ -79,7 +79,7 @@ module OpenUriCache
 
   DEFAULT_CACHE_DIRECTORY = "#{ENV['HOME']}/.open_uri_cache"
 
-  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: nil, after: nil)
+  def self.open(uri, *rest, cache_dir: DEFAULT_CACHE_DIRECTORY, expiration: nil, after: nil, sleep_sec: 0)
     if after
       expiration = Time.now + after
     end
@@ -108,6 +108,8 @@ module OpenUriCache
       rescue
         cache.delete
       end
+
+      sleep sleep_sec
 
       f.rewind
       return f
