@@ -13,15 +13,21 @@ open-uri と違い、Kernel::open は書き換えません。
 
 ## 使い方
 ```ruby
+  url = 'http://google.com'
+
   # expiration でキャッシュの有効期限を指定
-  puts OpenUriCache.open('http://google.com', expiration: Time.now + 10*60).read
+  puts OpenUriCache.open(url, expiration: Time.now + 10*60).read
   
   # after で現在時刻から何秒後を有効期限にするか指定
   # open(url, expiration: Time.now+s) == open(url, after: s)
-  puts OpenUriCache.open('http://google.com', after: 10*60).read
+  puts OpenUriCache.open(url, after: 10*60).read
 
   # cache_dir でキャッシュファイル保存ディレクトリを指定(デフォルトは~/.open_uri_cache)
-  puts OpenUriCache.open('http://google.com', cache_dir: './', after: 10*60).read
+  puts OpenUriCache.open(url, cache_dir: './', after: 10*60).read
+
+  # sleep_sec でキャッシュがないときのスリープ時間（秒）を指定。
+  # キャッシュがあった場合はスリープしない。
+  puts OpenUriCache.open(url, sleep_sec: 1).read
 ```
 
 ## 仕様
